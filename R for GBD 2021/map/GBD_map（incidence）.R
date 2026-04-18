@@ -1,5 +1,4 @@
-#设置工作空间
-setwd("F:\\table+figer资料")
+setwd("F:\\")
 #install.packages('ggmap')
 #install.packages('maps')
 #install.packages('dplyr')
@@ -8,31 +7,25 @@ library(maps)
 library(dplyr)
 library(RColorBrewer)
 
-IBD<- vroom::vroom("F:\\table+figer资料\\map\\Urticaria-ditu1.csv")
+IBD<- vroom::vroom("F:\\")
 head(IBD)
-#2021年的全年龄段粗发病率(Crude Incidence Rate,CIR)
-
 
 CIR_2021 <- subset(IBD,IBD$year==2021 & 
                      IBD$age_name=='Age-standardized' & 
                      IBD$metric_name== 'Rate' &
                      IBD$measure_name=='Incidence'&
                      IBD$sex_name=='Both') 
-CIR_2021 <- CIR_2021[,c(4,14,15,16)]  ###选择位置与数据+95%UI
+CIR_2021 <- CIR_2021[,c(4,14,15,16)]  
 
-
-CIR_2021$val <- round(CIR_2021$val,2) ###率保留2位小数点
+CIR_2021$val <- round(CIR_2021$val,2)
 CIR_2021$lower <- round(CIR_2021$lower,2) 
 CIR_2021$upper <- round(CIR_2021$upper,2) 
 
 
 ####  map for ASMR
-worldData <- map_data('world')  #####使用map包提取世界·范围内的地图
-country_asr <- CIR_2021         ####
+worldData <- map_data('world') 
+country_asr <- CIR_2021        
 country_asr$location <- as.character(country_asr$location_name) 
-
-###以下代码的目的是让country_asr$location的国家名称与worldData的国家名称一致
-### 这样才能让数据映射到地图上
 
 
 country_asr$location[country_asr$location == "People's Republic of China"] = 'China'
@@ -86,18 +79,16 @@ country_asr$location[country_asr$location == "State of Israel"] = 'Israel'
 country_asr$location[country_asr$location == "Lebanese Republic"] = 'Lebanon'
 
 
-total <- full_join(worldData,country_asr,by = c('region'='location'))##把两个数据根据地点合并起来
+total <- full_join(worldData,country_asr,by = c('region'='location'))
 write.csv(total,"total.csv")
-mycolor2 <- rev(brewer.pal(7, "Spectral"))  # 反转颜色顺序
-##选择我们觉得好看的颜色，这里使用了brewer.pal
-
+mycolor2 <- rev(brewer.pal(7, "Spectral"))  
 summary(total$val)
 
 quantile(total$val,seq(0.1,1,0.1),na.rm = T)
 
 #total <- total %>% mutate(val2 = cut(val, breaks = c(0,1156,1251,1503,1436,1539,2261),
 # labels = c("0~1156", "1156~1251","1251~1503",
-#"1503~1436","1436~1539","1539+"),  ## breaks需要根据自己的实际结果来调整
+#"1503~1436","1436~1539","1539+"), 
 #include.lowest = T,right = T))
 
 total <- total %>%
