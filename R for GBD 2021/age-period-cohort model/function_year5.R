@@ -1,6 +1,3 @@
-#### 该功能合并不同年份数据，5年为一单位
-#### 参考代码：https://blog.csdn.net/NickyCat/article/details/118636690?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164585075016781683955469%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=164585075016781683955469&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-2-118636690.pc_search_result_control_group&utm_term=GBD%E6%95%B0%E6%8D%AE%E5%BA%93&spm=1018.2226.3001.4187
-#### 做部分调整
 function_year5 <- function(table_name, start_year, end_year, current_year){
   
   remain <- current_year - floor((current_year - start_year)/5) * 5 
