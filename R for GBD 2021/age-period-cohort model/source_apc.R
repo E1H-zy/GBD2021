@@ -1,4 +1,3 @@
-# Install APC software
 library(Matrix)
 
 apc2fit <- function(R, ...)
